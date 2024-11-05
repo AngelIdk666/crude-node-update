@@ -45,12 +45,3 @@
     node --watch app.js ----> Opcion 1
     node app.js    -----> Opcion 2
 
-#### Notas
-
-    https://www.npmjs.com/package/mysql2
-
-    La propiedad "type": "module", en el archivo packege.json indica que estamos usando el sistema de modulos ECMAScript(ESM).
-    Con el fin de las palabras claves 'import' y 'export' para importar y exportar modulos respectivamente.
-    Cuando usamos (ESM) algunas caracteriscticas de nodejs como require() y module.exports no estan disponibles, en su lugar estan import y export.
-
-![](https://github.com/urian121/CRUD-Nodejs-Express-MySQL/blob/master/crud-completo-nodejs-express-mysql-urian-viera.png)
