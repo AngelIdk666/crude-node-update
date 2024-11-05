@@ -42,6 +42,6 @@
 
 #### Ejecutar el proyecto
 
-    node --watch app.js ----> Opcion 1
+    npm run dev ----> Opcion 1
     node app.js    -----> Opcion 2
 
