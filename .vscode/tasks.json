@@ -1,0 +1,17 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Docker Build Image",
+            "type": "shell",
+            "command": "docker build --pull --rm -f Dockerfile -t crudenodeupdate:latest .",
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Run Container",
+            "type": "shell",
+            "command": "docker run --rm -d -p 3000:3000 crudenodeupdate:latest",
+            "problemMatcher": []
+        }
+    ]
+}
