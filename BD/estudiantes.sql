@@ -1,5 +1,5 @@
 
-DROP TABLE IF EXISTS `estudiantes`;
+create database CrudeNodejs
 
 CREATE TABLE `estudiantes` (
   `id_estudiante` int NOT NULL AUTO_INCREMENT,
