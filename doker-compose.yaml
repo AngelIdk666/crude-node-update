@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  database:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: CrudNodejs
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./BD:/docker-entrypoint-initdb.d # Monta la carpeta con el archivo SQL
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crud-api
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: database
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: CrudNodejs
+      DB_PORT: 3306
+    depends_on:
+      - database
