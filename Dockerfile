@@ -14,12 +14,5 @@ RUN npm install
 # Expone el puerto de la API
 EXPOSE 3000
 
-# Configura las variables de entorno para la base de datos (si no se pasan en Docker Compose)
-ENV DB_HOST=localhost \
-    DB_USER=root \
-    DB_PASSWORD="" \
-    DB_NAME=CrudNodejs \
-    DB_PORT=3306
-
 # Comando para ejecutar la aplicación
 CMD ["npm", "start"]
