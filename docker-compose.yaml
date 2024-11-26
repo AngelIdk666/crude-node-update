@@ -1,31 +1,33 @@
-version: '3.8'
-services:
-  db:
-    build:
-      context: .
-      dockerfile: Dockerfile-mysql
-    container_name: mysql-container
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mi_base_de_datos
-      MYSQL_USER: usuario
-      MYSQL_PASSWORD: contraseña
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./BD:/docker-entrypoint-initdb.d
+version: "3.8"
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: node-api
-    environment:
-      DB_HOST: db
-      DB_USER: usuario
-      DB_PASSWORD: contraseña
-      DB_NAME: mi_base_de_datos
+services:
+  # Servicio para la API Node.js
+  api:
+    build: .
+    container_name: api-container
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Mapea el puerto 3000 del contenedor al puerto 3000 de tu máquina
+    environment:
+      MYSQL_HOST: db  # Nombre del servicio de la base de datos
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""  # Contraseña vacía en este ejemplo
+      MYSQL_DATABASE: CrudNodejs  # Nombre de la base de datos
     depends_on:
-      - db
+      - db  # Asegura que el contenedor de la base de datos se inicie antes que la API
+
+  # Servicio para la base de datos MySQL
+  db:
+    image: mysql:8
+    container_name: db-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ""  # Contraseña vacía en este ejemplo
+      MYSQL_DATABASE: CrudNodejs  # Nombre de la base de datos que se creará
+    ports:
+      - "3306:3306"  # Mapea el puerto 3306 del contenedor al puerto 3306 de tu máquina
+    volumes:
+      - db_data:/var/lib/mysql  # Persistencia de los datos
+      - ./Bd/estudiantes.sql:/docker-entrypoint-initdb.d/estudiantes.sql  # Importa el archivo SQL durante la inicialización
+
+volumes:
+  db_data:
+    driver: local
