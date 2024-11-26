@@ -1,20 +1,19 @@
-# Usa la imagen de Node.js
-FROM node:14
 
-# Establece el directorio de trabajo
-WORKDIR /usr/src/app
+FROM node:alpine
 
-# Copia los archivos de package.json y package-lock.json
+# Create app directory
+WORKDIR /home/appstudents
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
 COPY package*.json ./
 
-# Instala las dependencias
-RUN npm install
 
-# Copia el resto de la aplicación
+# Bundle app source
 COPY . .
 
-# Expone el puerto
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
+
+
