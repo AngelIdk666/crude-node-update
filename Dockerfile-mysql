@@ -1,1 +1,11 @@
+# Imagen base de MySQL
+FROM mysql:8.0
 
+# Copiar el archivo SQL al contenedor
+COPY BD/estudiantes.sql /docker-entrypoint-initdb.d/
+
+# Establecer variables de entorno para la base de datos
+ENV MYSQL_ROOT_PASSWORD=1234 
+ENV MYSQL_DATABASE=CrudNodejs 
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=1234 
