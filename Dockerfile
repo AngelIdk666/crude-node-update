@@ -1,13 +1,20 @@
-FROM node:latest
+# Usar la imagen base de Node.js
+FROM node:18
 
-WORKDIR /app
+# Crear y establecer el directorio de trabajo
+WORKDIR /usr/src/app
 
-COPY package.json ./
+# Copiar los archivos package.json y package-lock.json
+COPY package*.json ./
 
+# Instalar las dependencias del proyecto
 RUN npm install
 
-COPY . . 
+# Copiar el resto del código del proyecto
+COPY . .
 
+# Exponer el puerto de la aplicación
 EXPOSE 3000
 
-CMD ["node","app.js"]
+# Ejecutar la aplicación
+CMD ["node", "app.js"]
