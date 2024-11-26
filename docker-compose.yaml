@@ -21,10 +21,10 @@ services:
       dockerfile: Dockerfile
     container_name: node-api
     environment:
-      DB_HOST: localhost
-      DB_USER: root
-      DB_PASSWORD: ""
-      DB_NAME: CrudNodejs
+      DB_HOST: db
+      DB_USER: usuario
+      DB_PASSWORD: contraseña
+      DB_NAME: mi_base_de_datos
     ports:
       - "3000:3000"
     depends_on:
