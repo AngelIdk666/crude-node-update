@@ -1,45 +1,31 @@
 version: '3.8'
-
 services:
-  # Servicio para la base de datos MySQL
-  mysql:
-    image: mysql:5.7
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword  # Cambia esta contraseña si es necesario
-      MYSQL_DATABASE: estudiantes       # Nombre de la base de datos
-    volumes:
-      - mysql-data:/var/lib/mysql  # Volumen persistente para los datos de MySQL
-      - ./estudiantes.sql:/docker-entrypoint-initdb.d/estudiantes.sql  # Cargar el archivo SQL para inicializar la DB
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: mi_base_de_datos
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: contraseña
     ports:
       - "3306:3306"
-    networks:
-      - app-network
+    volumes:
+      - ./BD:/docker-entrypoint-initdb.d
 
-  # Servicio para la aplicación Node.js
-  nodejs:
+  app:
     build:
-      context: .  # Construir la imagen a partir del directorio actual
-      dockerfile: Dockerfile  # El archivo Dockerfile en el directorio actual
-    container_name: nodejs-container
+      context: .
+      dockerfile: Dockerfile
+    container_name: node-api
     environment:
-      DB_HOST: mysql  # Nombre del servicio de MySQL (será accesible dentro del contenedor por su nombre)
-      DB_PORT: 3306
-      DB_NAME: estudiantes
+      DB_HOST: localhost
       DB_USER: root
-      DB_PASSWORD: rootpassword  # La misma contraseña que en el servicio MySQL
+      DB_PASSWORD: ""
+      DB_NAME: CrudNodejs
     ports:
-      - "3000:3000"  # Exponer el puerto 3000 para acceder a la aplicación
+      - "3000:3000"
     depends_on:
-      - mysql  # Asegura que MySQL se inicie antes que Node.js
-    networks:
-      - app-network
-
-# Volúmenes para persistir los datos de MySQL
-volumes:
-  mysql-data:
-
-# Redes para comunicación entre servicios
-networks:
-  app-network:
-    driver: bridge
+      - db
