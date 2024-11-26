@@ -5,7 +5,7 @@ FROM mysql:8.0
 COPY BD/estudiantes.sql /docker-entrypoint-initdb.d/
 
 # Establecer variables de entorno para la base de datos
-ENV MYSQL_ROOT_PASSWORD=1234 
+ENV MYSQL_ROOT_PASSWORD=""
 ENV MYSQL_DATABASE=CrudNodejs 
 ENV MYSQL_USER=root
-ENV MYSQL_PASSWORD=1234 
+ENV MYSQL_PASSWORD=""
