@@ -1,40 +1,90 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-api-deployment
+  name: estudiantes-api
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: node-api
+      app: estudiantes-api
   template:
     metadata:
       labels:
-        app: node-api
+        app: estudiantes-api
     spec:
       containers:
-      - name: node-api
-        image: tu-imagen-de-api
+      - name: estudiantes-api
+        image: angelidk/node  # Imagen actualizada a la que has mencionado
         ports:
         - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
         env:
-        - name: DB_HOST
-          value: mysql-service
-        - name: DB_USER
-          value: usuario
-        - name: DB_PASSWORD
-          value: contraseña
-        - name: DB_NAME
-          value: mi_base_de_datos
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root_password"
+        - name: MYSQL_DATABASE
+          value: "mi_base_de_datos"
+        - name: MYSQL_USER
+          value: "usuario"
+        - name: MYSQL_PASSWORD
+          value: "contraseña"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        - name: estudiantes-sql
+          mountPath: /docker-entrypoint-initdb.d
+          subPath: estudiantes.sql
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-api-service
+  name: estudiantes-api-service
 spec:
   selector:
-    app: node-api
+    app: estudiantes-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3000
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
