@@ -1,33 +1,22 @@
-version: "3.8"
-
+version: '2'
 services:
-  # Servicio para la API Node.js
-  api:
-    build: .
-    container_name: api-container
-    ports:
-      - "3000:3000"  # Mapea el puerto 3000 del contenedor al puerto 3000 de tu máquina
-    environment:
-      MYSQL_HOST: db  # Nombre del servicio de la base de datos
-      MYSQL_USER: root
-      MYSQL_PASSWORD: ""  # Contraseña vacía en este ejemplo
-      MYSQL_DATABASE: CrudNodejs  # Nombre de la base de datos
-    depends_on:
-      - db  # Asegura que el contenedor de la base de datos se inicie antes que la API
-
-  # Servicio para la base de datos MySQL
   db:
-    image: mysql:8
-    container_name: db-container
-    environment:
-      MYSQL_ROOT_PASSWORD: ""  # Contraseña vacía en este ejemplo
-      MYSQL_DATABASE: CrudNodejs  # Nombre de la base de datos que se creará
-    ports:
-      - "3306:3306"  # Mapea el puerto 3306 del contenedor al puerto 3306 de tu máquina
+    container_name: mysql_dockerhub02
+    image: dockerckgoh1439/nodejsmysql-demo2:1.0
     volumes:
-      - db_data:/var/lib/mysql  # Persistencia de los datos
-      - ./Bd/estudiantes.sql:/docker-entrypoint-initdb.d/estudiantes.sql  # Importa el archivo SQL durante la inicialización
-
-volumes:
-  db_data:
-    driver: local
+       - /home/demo1/tmp/:/var/lib/mysql
+    network_mode: "gp-bridgenet-01"
+    ports:
+       - "3306:3306"   
+  web:
+    container_name: student_dockerhub02
+    build: .
+    image: dockerckgoh1439/nodejs-demo2:1.0
+    depends_on: 
+      - db
+    network_mode: "gp-bridgenet-01"
+    ports:
+      - "4300:4300"
+    links:
+      - db
+ 
